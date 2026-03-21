@@ -26,3 +26,21 @@ export const createTask = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+
+export const getTask = async (req, res) => {
+  try {
+
+    // 2. Create Task
+    const tasks = await Task.find({user: req.user.id})
+    if(!tasks) return res.status(500).send({"error":"Tasks were not found.."})
+
+    // 3. Response
+    res.status(201).json({
+      message:"Tasks fetched...",
+      tasks
+    });
+  } catch (error) {
+    res.status(500).send({ "error": error.message });
+  }
+};
