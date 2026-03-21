@@ -55,13 +55,36 @@ export const updateTask = async (req, res) => {
     if (description) task.description = description;
     if (status) task.status = status;
 
-    // 3. Save updated task
     const updatedTask = await task.save();
 
-    // 4. Response
     res.status(200).json({
       message: "Task updated successfully",
       task: updatedTask,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+export const deleteTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedTask = await Task.findOneAndDelete({
+      _id: id,
+      user: req.user.id,
+    });
+
+    if (!deletedTask) {
+      return res.status(404).json({
+        message: "Task not found or unauthorized",
+      });
+    }
+
+    res.status(200).json({
+      message: "Task deleted successfully",
+      task: deletedTask,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
