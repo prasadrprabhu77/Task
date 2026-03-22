@@ -6,6 +6,9 @@ const authRouter = express.Router();
 
 authRouter.post("/signup", signUp)
 authRouter.post("/login", login)
-authRouter.get("/dummy", authMiddleware,(req,res)=> res.send("dummy working"))
+authRouter.get("/profile", authMiddleware, async (req,res)=> {
+     const user = await User.findById(req.user.id).select("-password");
+  res.json(user);
+})
 
 export default authRouter;
