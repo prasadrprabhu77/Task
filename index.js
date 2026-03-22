@@ -13,7 +13,6 @@ const PORT = process.env.PORT || 9000;
 app.use(cors())
 app.use(express.json())
 
-connectDB();
 
 app.get("/",(req,res)=> {
   res.send("Working...")
@@ -26,6 +25,17 @@ app.use("/auth", authRouter)
 app.use("/task", taskRouter)
 
 
-app.listen(PORT, () => {
-  console.log(`Server running on Port ${PORT}`)
-});
+const startServer = async () => {
+  try {
+    await connectDB(); // ✅ wait here
+
+    app.listen(PORT, () => {
+      console.log(`Server running on Port ${PORT}`);
+    });
+
+  } catch (error) {
+    console.error("Failed to start server ❌", error);
+  }
+};
+
+startServer();
