@@ -12,7 +12,7 @@ authRouter.get("/profile", authMiddleware, async (req,res)=> {
         const user = await User.findById(req.user.id).select("-password");
         res.json(user);
     } catch (error) {
-        res.status(500).json({ message: "Error fetching user profile" });
+        res.status(500).json({ error: error.message });
     }
 })
 
